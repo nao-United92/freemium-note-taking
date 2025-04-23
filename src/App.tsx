@@ -3,8 +3,26 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import NoteDetail from './pages/NoteDetail';
 import Signin from './pages/Signin';
 import Signup from './pages/Signup';
+import { authRepository } from './modules/auth/auth.repository';
+import { useEffect, useState } from 'react';
+import { userCurrentUserStore } from './modules/auth/current-user.state';
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+  const currentUserStore = userCurrentUserStore();
+
+  useEffect(() => {
+    setSession();
+  }, []);
+
+  const setSession = async () => {
+    const currentUser = await authRepository.getCurrentUser();
+    currentUserStore.set(currentUser);
+    setIsLoading(false);
+  };
+
+  if (isLoading) return <div />;
+
   return (
     <BrowserRouter>
       <div className="h-full">

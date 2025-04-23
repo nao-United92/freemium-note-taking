@@ -3,12 +3,8 @@ import { atom, useAtom } from 'jotai';
 
 const currentUserAtom = atom<User>();
 
-export const userCurrentStore = () => {
+export const userCurrentUserStore = () => {
   const [currentUser, setCurrentUser] = useAtom(currentUserAtom);
 
   return { currentUser, set: setCurrentUser };
 };
-
-const currentUserStore = userCurrentStore();
-currentUserStore.set(userData);
-currentUserStore.currentUser;
