@@ -1,15 +1,18 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { userCurrentUserStore } from '@/modules/auth/current-user.state';
-import { noteRepository } from '@/modules/notes/notes.repository';
+import { noteRepository } from '@/modules/notes/note.repository';
+import { useNoteStore } from '@/modules/notes/note.state';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
 
 export function Home() {
   const [title, setTitle] = useState;
   const { currentUser } = userCurrentUserStore();
+  const noteStore = useNoteStore();
 
   const createNote = async () => {
     const newNote = await noteRepository.create(currentUser!.id, { title });
+    noteStore.set([newNote]);
     setTitle('');
   };
 
