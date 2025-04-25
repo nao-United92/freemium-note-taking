@@ -5,11 +5,11 @@ import Signin from './pages/Signin';
 import Signup from './pages/Signup';
 import { authRepository } from './modules/auth/auth.repository';
 import { useEffect, useState } from 'react';
-import { userCurrentUserStore } from './modules/auth/current-user.state';
+import { useCurrentUserStore } from './modules/auth/current-user.state';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const currentUserStore = userCurrentUserStore();
+  const currentUserStore = useCurrentUserStore();
 
   useEffect(() => {
     setSession();
@@ -28,6 +28,7 @@ function App() {
       <div className="h-full">
         <Routes>
           <Route path="/" element={<Layout />}>
+          <Route path="/notes/:id" element={<NoteDetail />} />
             <Route path="/notes/:id" element={<NoteDetail />} />
           </Route>
           <Route path="/signin" element={<Signin />} />
