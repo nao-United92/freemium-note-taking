@@ -44,6 +44,7 @@ const NoteDetail = () => {
           initialData={note}
           onTitleChange={(title) => updateNote(id, { title })}
         />
+        <Editor onChange={(content) => updateNote(id, { content })} />
       </div>
     </div>
   );
