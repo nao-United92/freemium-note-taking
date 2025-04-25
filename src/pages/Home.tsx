@@ -4,8 +4,10 @@ import { noteRepository } from '@/modules/notes/note.repository';
 import { useNoteStore } from '@/modules/notes/note.state';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export function Home() {
+  const navigate = useNavigate();
   const [title, setTitle] = useState;
   const { currentUser } = useCurrentUserStore();
   const noteStore = useNoteStore();
@@ -14,6 +16,7 @@ export function Home() {
     const newNote = await noteRepository.create(currentUser!.id, { title });
     noteStore.set([newNote]);
     setTitle('');
+    navigate(`/notes/${newNote.id}`);
   };
 
   return (
@@ -32,8 +35,10 @@ export function Home() {
             onChange={(e) => setTitle(e.target.value)}
             value={title}
           />
-          <button className="flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 disabled:opacity-50 disabled:cursor-not-allowed"
-            onClick={createNote}>
+          <button
+            className="flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={createNote}
+          >
             <Plus className="h-4 w-4" />
             <span className="ml-1">ノート作成</span>
           </button>
