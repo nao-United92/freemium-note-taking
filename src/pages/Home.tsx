@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 export function Home() {
   const navigate = useNavigate();
-  const [title, setTitle] = useState;
+  const [title, setTitle] = useState('');
   const { currentUser } = useCurrentUserStore();
   const noteStore = useNoteStore();
 

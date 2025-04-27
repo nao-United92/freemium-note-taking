@@ -29,6 +29,7 @@ interface Props {
 }
 
 export function NoteItem({
+  note,
   onClick,
   layer = 0,
   expanded = false,

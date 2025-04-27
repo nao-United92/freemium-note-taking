@@ -11,7 +11,7 @@ export const supabase = createClient<Database>(
   import.meta.env.VITE_SUPABASE_API_KEY
 );
 
-export const subscribe = async (
+export const subscribe = (
   userId: string,
   callback: (payload: RealtimePostgresChangesPayload<Note>) => void
 ) => {
@@ -30,6 +30,6 @@ export const subscribe = async (
     .subscribe();
 };
 
-export const unsubscribe = async (channel: RealtimeChannel) => {
+export const unsubscribe = (channel: RealtimeChannel) => {
   supabase.removeChannel(channel);
 };

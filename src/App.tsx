@@ -6,6 +6,7 @@ import Signup from './pages/Signup';
 import { authRepository } from './modules/auth/auth.repository';
 import { useEffect, useState } from 'react';
 import { useCurrentUserStore } from './modules/auth/current-user.state';
+import { Home } from './pages/Home';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -28,7 +29,7 @@ function App() {
       <div className="h-full">
         <Routes>
           <Route path="/" element={<Layout />}>
-          <Route path="/notes/:id" element={<NoteDetail />} />
+            <Route index element={<Home />} />
             <Route path="/notes/:id" element={<NoteDetail />} />
           </Route>
           <Route path="/signin" element={<Signin />} />
