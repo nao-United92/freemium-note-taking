@@ -5,12 +5,14 @@ import { useCurrentUserStore } from './modules/auth/current-user.state';
 import { useNoteStore } from './modules/notes/note.state';
 import { noteRepository } from './modules/notes/note.repository';
 import { useEffect, useState } from 'react';
+import { Note } from './modules/notes/note.entity';
 
 const Layout = () => {
   const { currentUser } = useCurrentUserStore();
   const noteStore = useNoteStore();
   const [isLoading, setIsLoading] = useState(false);
   const [isShowModal, setIsShowModal] = useState(false);
+  const [searchResult, setSearchResult] = useState<Note[]>([]);
 
   useEffect(() => {
     fetchNotes();
@@ -22,6 +24,13 @@ const Layout = () => {
     if (notes == null) return;
     noteStore.set(notes);
     setIsLoading(false);
+  };
+
+  const searchNotes = async (keyword: string) => {
+    const notes = await noteRepository.findByKeyword(currentUser!.id, keyword);
+    if (notes == null) return;
+    noteStore.set(notes);
+    setSearchResult(notes);
   };
 
   if (currentUser == null) return <Navigate replace to="/signin" />;
@@ -36,9 +45,9 @@ const Layout = () => {
         <Outlet />
         <SearchModal
           isOpen={isShowModal}
-          notes={[]}
+          notes={searchResult}
           onItemSelect={() => {}}
-          onKeywordChanged={() => {}}
+          onKeywordChanged={searchNotes}
           onClose={() => setIsShowModal(false)}
         />
       </main>
