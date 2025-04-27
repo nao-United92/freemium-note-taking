@@ -7,6 +7,8 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command';
+import { Note } from '@/modules/notes/note.entity';
+import { useDebouncedCallback } from 'use-debounce';
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -23,12 +25,14 @@ export function SearchModal({
   onKeywordChanged,
   onClose,
 }: SearchModalProps) {
+  const debounce = useDebouncedCallback(onKeywordChanged, 500);
+
   return (
     <CommandDialog open={isOpen} onOpenChange={onClose}>
       <Command shouldFilter={false}>
         <CommandInput
           placeholder={'キーワードで検索'}
-          onValueChanged={onKeywordChanged}
+          onValueChange={debounce}
         />
         <CommandList>
           <CommandEmpty>条件に一致するノートがありません</CommandEmpty>
