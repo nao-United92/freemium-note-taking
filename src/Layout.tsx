@@ -1,4 +1,4 @@
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 import SideBar from './components/SideBar';
 import { SearchModal } from './components/SearchModal';
 import { useCurrentUserStore } from './modules/auth/current-user.state';
@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { Note } from './modules/notes/note.entity';
 
 const Layout = () => {
+  const navigate = useNavigate();
   const { currentUser } = useCurrentUserStore();
   const noteStore = useNoteStore();
   const [isLoading, setIsLoading] = useState(false);
@@ -33,6 +34,11 @@ const Layout = () => {
     setSearchResult(notes);
   };
 
+  const moveToDetail = (noteId: number) => {
+    navigate(`/notes/${noteId}`);
+    setIsShowModal(false);
+  };
+
   if (currentUser == null) return <Navigate replace to="/signin" />;
 
   return (
@@ -46,7 +52,7 @@ const Layout = () => {
         <SearchModal
           isOpen={isShowModal}
           notes={searchResult}
-          onItemSelect={() => {}}
+          onItemSelect={moveToDetail}
           onKeywordChanged={searchNotes}
           onClose={() => setIsShowModal(false)}
         />
