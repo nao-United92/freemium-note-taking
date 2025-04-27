@@ -1,5 +1,5 @@
 import { authRepository } from '@/modules/auth/auth.repository';
-import { userCurrentUserStore } from '@/modules/auth/current-user.state';
+import { useCurrentUserStore } from '@/modules/auth/current-user.state';
 import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 
@@ -7,7 +7,7 @@ function Signup() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const currentUserStore = userCurrentUserStore();
+  const currentUserStore = useCurrentUserStore();
 
   const signup = async () => {
     const user = await authRepository.signup(name, email, password);

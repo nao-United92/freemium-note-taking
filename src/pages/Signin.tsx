@@ -1,12 +1,12 @@
 import { authRepository } from '@/modules/auth/auth.repository';
-import { userCurrentUserStore } from '@/modules/auth/current-user.state';
+import { useCurrentUserStore } from '@/modules/auth/current-user.state';
 import { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 
 function Signin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const currentUserStore = userCurrentUserStore();
+  const currentUserStore = useCurrentUserStore();
 
   const signin = async () => {
     const user = await authRepository.signin(email, password);
