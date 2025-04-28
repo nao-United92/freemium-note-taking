@@ -1,4 +1,4 @@
-import { Note } from '@/modules/notes/note';
+import { Note } from '@/modules/notes/note.entity';
 import { useState } from 'react';
 import TextAreaAutoSize from 'react-textarea-autosize';
 

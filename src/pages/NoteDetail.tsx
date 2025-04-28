@@ -1,3 +1,4 @@
+import Editor from '@/components/Editor';
 import { TitleInput } from '@/components/TitleInput';
 import { useCurrentUserStore } from '@/modules/auth/current-user.state';
 import { noteRepository } from '@/modules/notes/note.repository';
@@ -20,6 +21,7 @@ const NoteDetail = () => {
   const fetchOne = async () => {
     setIsLoading(true);
     const note = await noteRepository.findOne(currentUser!.id, id);
+    if (note == null) return;
     noteStore.set([note]);
     setIsLoading(false);
   };

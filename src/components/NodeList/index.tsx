@@ -5,7 +5,7 @@ import { useCurrentUserStore } from '@/modules/auth/current-user.state';
 import { noteRepository } from '@/modules/notes/note.repository';
 import { Note } from '@/modules/notes/note.entity';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface NoteListProps {
   layer?: number;
@@ -14,7 +14,7 @@ interface NoteListProps {
 
 export function NoteList({ layer = 0, parentId }: NoteListProps) {
   const params = useParams();
-  const id = params.id != null ? parseInt(params.Id) : undefined;
+  const id = params.id != null ? parseInt(params.id) : undefined;
   const navigate = useNavigate();
   const noteStore = useNoteStore();
   const notes = noteStore.getAll();
