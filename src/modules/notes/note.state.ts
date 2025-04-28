@@ -43,6 +43,5 @@ export const useNoteStore = () => {
     getOne,
     set,
     delete: deleteNote,
-    clear,
   };
 };

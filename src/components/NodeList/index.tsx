@@ -13,6 +13,8 @@ interface NoteListProps {
 }
 
 export function NoteList({ layer = 0, parentId }: NoteListProps) {
+  const params = useParams();
+  const id = params.id != null ? parseInt(params.Id) : undefined;
   const navigate = useNavigate();
   const noteStore = useNoteStore();
   const notes = noteStore.getAll();
@@ -67,6 +69,7 @@ export function NoteList({ layer = 0, parentId }: NoteListProps) {
               <NoteItem
                 note={note}
                 layer={layer}
+                isSelected={id === note.id}
                 expanded={expanded.get(note.id)}
                 onClick={() => moveToDetail(note.id)}
                 onExpand={(e: React.MouseEvent) => fetchChildren(e, note)}
