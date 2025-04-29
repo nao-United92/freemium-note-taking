@@ -13,6 +13,7 @@ export const authRepository = {
       userName: data.user.user_metadata.name,
     };
   },
+
   async signin(email: string, password: string) {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
