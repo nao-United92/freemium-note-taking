@@ -7,22 +7,24 @@ import { noteRepository } from './modules/notes/note.repository';
 import { useEffect, useState } from 'react';
 import { Note } from './modules/notes/note.entity';
 import { subscribe, unsubscribe } from './lib/supabase';
+import { authRepository } from './modules/auth/auth.repository';
 
 const Layout = () => {
   const navigate = useNavigate();
-  const { currentUser } = useCurrentUserStore();
+  const { currentUser, set: setCurrentUser } = useCurrentUserStore();
   const noteStore = useNoteStore();
   const [isLoading, setIsLoading] = useState(false);
   const [isShowModal, setIsShowModal] = useState(false);
   const [searchResult, setSearchResult] = useState<Note[]>([]);
 
   useEffect(() => {
+    if (!currentUser) return;
     fetchNotes();
     const channel = subscribeNote();
     return () => {
-      unsubscribe(channel!);
+      if (channel) unsubscribe(channel);
     };
-  }, []);
+  }, [currentUser]);
 
   const subscribeNote = () => {
     if (currentUser == null) return;
@@ -43,9 +45,9 @@ const Layout = () => {
   };
 
   const searchNotes = async (keyword: string) => {
-    const notes = await noteRepository.findByKeyword(currentUser!.id, keyword);
+    if (!currentUser) return;
+    const notes = await noteRepository.findByKeyword(currentUser.id, keyword);
     if (notes == null) return;
-    noteStore.set(notes);
     setSearchResult(notes);
   };
 
@@ -54,12 +56,31 @@ const Layout = () => {
     setIsShowModal(false);
   };
 
+  const createNote = async () => {
+    if (!currentUser) return;
+    const newNote = await noteRepository.create(currentUser.id, {});
+    noteStore.set([newNote]);
+    navigate(`/notes/${newNote.id}`);
+    setIsShowModal(false);
+  };
+
+  const signout = async () => {
+    await authRepository.signout();
+    setCurrentUser(undefined);
+    noteStore.clear();
+  };
+
   if (currentUser == null) return <Navigate replace to="/signin" />;
 
   return (
     <div className="h-full flex">
       {!isLoading && (
-        <SideBar onSearchButtonClicked={() => setIsShowModal(true)} />
+        <SideBar
+          currentUser={currentUser}
+          onSearchButtonClicked={() => setIsShowModal(true)}
+          createNote={createNote}
+          signout={signout}
+        />
       )}
       <main className="flex-1 h-full overflow-y-auto">
         <Outlet />
@@ -69,6 +90,8 @@ const Layout = () => {
           onItemSelect={moveToDetail}
           onKeywordChanged={searchNotes}
           onClose={() => setIsShowModal(false)}
+          createNote={createNote}
+          signout={signout}
         />
       </main>
     </div>

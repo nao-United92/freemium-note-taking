@@ -3,43 +3,28 @@ import { Item } from './Item';
 import { NoteList } from '../NodeList';
 import UserItem from './UserItem';
 import { Plus, Search } from 'lucide-react';
-import { useCurrentUserStore } from '@/modules/auth/current-user.state';
-import { useNoteStore } from '@/modules/notes/note.state';
-import { noteRepository } from '@/modules/notes/note.repository';
-import { useNavigate } from 'react-router-dom';
-import { authRepository } from '@/modules/auth/auth.repository';
 import { ThemeToggle } from './ThemeToggle';
+import { User } from '@supabase/supabase-js';
 
 type Props = {
+  currentUser: User;
   onSearchButtonClicked: () => void;
+  createNote: () => void;
+  signout: () => void;
 };
 
-const SideBar: FC<Props> = ({ onSearchButtonClicked }) => {
-  const navigate = useNavigate();
-  const currentUserStore = useCurrentUserStore();
-  const noteStore = useNoteStore();
-
-  const createNote = async () => {
-    const newNote = await noteRepository.create(
-      currentUserStore.currentUser!.id,
-      {}
-    );
-    noteStore.set([newNote]);
-    navigate(`/notes/${newNote.id}`);
-  };
-
-  const signout = async () => {
-    await authRepository.signout();
-    currentUserStore.set(undefined);
-    noteStore.clear();
-  };
-
+const SideBar: FC<Props> = ({
+  currentUser,
+  onSearchButtonClicked,
+  createNote,
+  signout,
+}) => {
   return (
     <>
       <aside className="group/sidebar h-full bg-neutral-100 dark:bg-neutral-900 overflow-y-auto relative flex flex-col w-60">
         <div>
           <div>
-            <UserItem user={currentUserStore.currentUser!} signout={signout} />
+            <UserItem user={currentUser} signout={signout} />
             <Item label="検索" icon={Search} onClick={onSearchButtonClicked} />
             <ThemeToggle />
           </div>
